@@ -1,3 +1,4 @@
+const Message = require("../models/message");
 const User = require("../models/user");
 
 module.exports.sendMessage = async (req, res) => {
@@ -6,7 +7,13 @@ module.exports.sendMessage = async (req, res) => {
   const user = await User.findByPk(req.user.userId);
   user.createMessage({
     userEmail: user.dataValues.email,
-    messageBody: req.body.msg,
+    messageBody: req.body.message,
   });
   res.end();
+};
+
+module.exports.getAllMessages = async (req, res) => {
+  const all = await Message.findAll();
+  const allMessages = all.map((item) => item.dataValues);
+  res.json({ allMessages });
 };
